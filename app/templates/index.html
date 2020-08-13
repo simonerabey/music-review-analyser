@@ -18,12 +18,28 @@
         <div class="container">
             <h1>MUSIC SENTIMENT REVIEW</h1>
             <p>
-                <input type="text" id="main_search" placeholder="Search artist, album or single">
+                <input type="text" id="main_search" placeholder="Search reviews">
             </p>
         </div>
         <div class="container">
             <p>
                 You write the review, we assign a score based on the sentiment of the review.
+            </p>
+            <h2>NEW REVIEW</h2>
+            <p>
+                <label for="album_input">Album: </label>
+                <input type="text" id="album_input">
+            </p>
+            <p>
+                <label for="artist_input">Artist:</label>
+                <input type="text" id="artist_input">
+            </p>
+            <p>
+                <label for="review_textarea">Review:</label>
+                <textarea id="review_textarea" rows="20"></textarea>
+            </p>
+            <p>
+                <input type="button" id="get_score_button" class="btn" value="Get Score">
             </p>
         </div>
         <script src="" async defer></script>
