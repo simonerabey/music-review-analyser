@@ -9,3 +9,6 @@ class Review(db.Model):
     description = db.Column(db.String(2000))
     score = db.Column(db.Integer)
     date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return "<Review: %r - %r - %r - %d>" % self.album, self.artist, self.description, self.score
