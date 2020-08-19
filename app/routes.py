@@ -1,6 +1,6 @@
 import requests
 from app import app, text_analytics_endpoint, text_analytics_key, models, db
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 
 Review = models.Review
 
@@ -15,14 +15,26 @@ def index():
 
 @app.route('/review/', methods=['GET', 'POST'])
 def show_review():
-    artist = request.form.get("artist")
-    album = request.form.get("album")
-    description = request.form.get("description")
-    score = get_score(description)
-    review = Review(artist=artist, album=album, description=description, score=score)
-    db.session.add(review)
-    db.session.commit()
-    return render_template("review.html", artist=artist, album=album, review=description, score=score)
+    if request.method == "POST":
+        artist = request.form.get("artist")
+        album = request.form.get("album")
+        description = request.form.get("description")
+        score = get_score(description)
+        review = Review(artist=artist, album=album, description=description, score=score)
+        db.session.add(review)
+        db.session.commit()
+        return render_template("review.html", id=review.id, artist=artist, album=album, review=description, score=score)
+    return redirect(url_for(index))
+
+@app.route("/delete/<int:id>", methods=["DELETE"])
+def delete(id):
+    review = Review.query.filter_by(id=id)
+    try:
+        db.session.delete(review.first())
+        db.session.commit()
+    except:
+        return jsonify({"msg": "Could not delete review"}), 200
+    return jsonify({"msg": "Successfully deleted review"}), 204
 
 #@app.route('/search/', methods=['POST'])
 #def search():

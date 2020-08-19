@@ -27,10 +27,54 @@
             <p>Artist: {{artist}}</p>
             <p>Score: {{score}}/100</p>
             <p>Review: {{review}}</p>
+            <button
+                type="button"
+                data-review-id="{{id}}"
+                data-toggle="modal"
+                data-target="#deleteWarning"
+                class="btn btn-danger"
+                onclick="{setReviewId(this)}"
+            >Delete</button>
+        </div>
+        
+        <div
+            class="modal fade"
+            id="deleteWarning"
+            role="dialog"
+        >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteWarningLabel">Delete Review</h5>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete your review on {{album}} by {{artist}}?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        No
+                    </button>
+                    <button type="button" class="btn btn-danger" onClick="deleteReview(reviewId)">
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </div>
         </div>
         <script src="" async defer></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script>
+            var reviewId = -1;
+            function setReviewId(event) {
+                reviewId = event.dataset.reviewId;
+            }
+            function deleteReview(id) {
+                fetch("/delete/" + id, {method:"DELETE"})
+                .then(() => window.location.reload())
+                .catch((e) => console.log("ERROR: " + e));
+            }
+        </script>
     </body>
 </html>
