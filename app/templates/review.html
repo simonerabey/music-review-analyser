@@ -1,6 +1,11 @@
 {% extends "base.html" %} 
 
 {% block body %}
+            {% with msg = get_flashed_messages() %}
+                {% if messages %}
+                    {{ messages }}
+                {% endif %}
+            {% endwith %}
             <h2>REVIEW</h2> 
             <p>Album: {{album}}</p>
             <p>Artist: {{artist}}</p>

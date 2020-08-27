@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h2>Search Results</h2>
+{% for result in results %}
+<tr>
+    <td>
+        <a href="{{ url_for('show_review', id=result.id) }}">
+            {{ result.artist }} - {{ result.album }}
+        </a>
+    </td>
+    <td>Score: {{ result.score }}</td>
+    <td>Published: {{ result.date }}</td>
+</tr>
+{% endfor %}
+
+{% endblock %}

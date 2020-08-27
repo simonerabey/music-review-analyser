@@ -17,9 +17,12 @@
         <![endif]-->
         <div class="container">
             <h1>MUSIC SENTIMENT REVIEW</h1>
-            <p>
-                <input type="text" id="main_search" placeholder="Search reviews">
-            </p>
+            <form action="/search" method="get">
+                <div class="form-group">
+                    {{ g.search_form.search(class="form-control", placeholder=g.search_form.search.label.text) }}
+                </div>
+                    
+            </form>
         </div>
         <div class="container">
             {% block body %}

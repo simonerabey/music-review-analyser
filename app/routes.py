@@ -1,8 +1,14 @@
 import requests
 from app import app, text_analytics_endpoint, text_analytics_key, models, db
-from flask import render_template, request, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, g, flash
+from app.forms import SearchForm
 
 Review = models.Review
+
+@app.before_request
+def before_request():
+    db.session.commit()
+    g.search_form = SearchForm(meta={"csrf": False}, formdata=request.args)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -13,18 +19,33 @@ def index():
         return render_template("index.html", score=score)
     return render_template("index.html", score="-")
 
-@app.route('/review/', methods=['GET', 'POST'])
-def show_review():
-    if request.method == "POST":
-        artist = request.form.get("artist")
-        album = request.form.get("album")
-        description = request.form.get("description")
-        score = get_score(description)
-        review = Review(artist=artist, album=album, description=description, score=score)
-        db.session.add(review)
-        db.session.commit()
-        return render_template("review.html", id=review.id, artist=artist, album=album, review=description, score=score)
-    return redirect(url_for(index))
+@app.route('/search')
+def search():
+    if not g.search_form.validate():
+        return redirect(url_for("index"))
+    results = Review.search(g.search_form.search.data)
+    return render_template("search.html", results=results)
+
+@app.route('/publish/', methods=['POST'])
+def publish():
+    artist = request.form.get("artist")
+    album = request.form.get("album")
+    description = request.form.get("description")
+    score = get_score(description)
+    review = Review(artist=artist, album=album, description=description, score=score)
+    db.session.add(review)
+    db.session.commit()
+    return redirect(url_for("show_review", id=review.id))
+
+@app.route('/review/<id>', methods=['GET', 'POST'])
+def show_review(id):
+    review = Review.query.filter_by(id=id)
+    r = review.first()
+    if r:
+        return render_template("review.html", id=id, artist=r.artist, album=r.album, review=r.description, score=r.score)
+    flash("Review not found")
+    return render_template("review.html")
+
 
 @app.route("/delete/<int:id>", methods=["DELETE"])
 def delete(id):
@@ -35,10 +56,6 @@ def delete(id):
     except:
         return jsonify({"msg": "Could not delete review"}), 200
     return jsonify({"msg": "Successfully deleted review"}), 204
-
-#@app.route('/search/', methods=['POST'])
-#def search():
-    #pass
 
 def get_score(review):
     url = text_analytics_endpoint + "/text/analytics/v3.0/sentiment"
