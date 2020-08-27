@@ -14,10 +14,12 @@ def before_request():
 def index():
     db.create_all()
     if request.method == "POST":
+        artist = request.form.get("artist")
+        album = request.form.get("album")
         description = request.form.get("description")
         score = get_score(description)
-        return render_template("index.html", score=score)
-    return render_template("index.html", score="-")
+        return render_template("index.html", artist=artist, album=album, description=description, score=score)
+    return render_template("index.html", artist="", album="", description="", score="-")
 
 @app.route('/search')
 def search():
