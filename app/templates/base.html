@@ -17,6 +17,7 @@
         <![endif]-->
         <div class="container">
             <h1>MUSIC SENTIMENT REVIEW</h1>
+            <a type=button href="{{ url_for('index') }}">New Review</a>
             <form action="/search" method="get">
                 <div class="form-group">
                     {{ g.search_form.search(class="form-control", placeholder=g.search_form.search.label.text) }}
