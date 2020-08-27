@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block body %}
+    {% with msg = get_flashed_messages() %}
+        {% if msg %}
+            {{ msg[0] }}
+        {% endif %}
+    {% endwith %}
             <p>
                 You write the review, we assign a score based on the sentiment of the review.
             </p>

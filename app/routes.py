@@ -37,7 +37,7 @@ def publish():
     db.session.commit()
     return redirect(url_for("show_review", id=review.id))
 
-@app.route('/review/<id>', methods=['GET', 'POST'])
+@app.route('/review/<int:id>', methods=['GET', 'POST'])
 def show_review(id):
     review = Review.query.filter_by(id=id)
     r = review.first()
@@ -53,6 +53,7 @@ def delete(id):
     try:
         db.session.delete(review.first())
         db.session.commit()
+        flash("Review successfully deleted")
     except:
         return jsonify({"msg": "Could not delete review"}), 200
     return jsonify({"msg": "Successfully deleted review"}), 204

@@ -40,7 +40,7 @@
             }
             function deleteReview(id) {
                 fetch("/delete/" + id, {method:"DELETE"})
-                .then(() => window.location.reload())
+                .then(() => window.location.replace("/"))
                 .catch((e) => console.log("ERROR: " + e));
             }
         </script>
