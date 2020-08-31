@@ -9,22 +9,22 @@
             <p>
                 You write the review, we assign a score based on the sentiment of the review.
             </p>
-            <h2>NEW REVIEW</h2>
+            <h2 class="text-info">NEW REVIEW</h2>
             <form method="post">
                 <div class="form-group">
                     <label for="album_input">Album: </label>
-                    <input name="album" type="text" class="form-control" id="album_input" value="{{ album }}">
+                    <input name="album" type="text" class="form-control p-3 mb-2 bg-secondary text-white" id="album_input" value="{{ album }}">
                 </div>
                 <div class="form-group">
                     <label for="artist_input">Artist:</label>
-                    <input name="artist" type="text" class="form-control" id="artist_input" value="{{ artist }}">
+                    <input name="artist" type="text" class="form-control p-3 mb-2 bg-secondary text-white" id="artist_input" value="{{ artist }}">
                 </div>
                 <div class="form-group">
                     <label for="review_textarea">Review: </label>
-                    <textarea name="description" class="form-control" id="review_textarea" rows="20">{{ description }}</textarea>
+                    <textarea name="description" class="form-control p-3 mb-2 bg-secondary text-white" id="review_textarea" rows="20">{{ description }}</textarea>
                 </div>
-                <button type="submit" formaction="/">Get Score</button>
-                <button type="submit" formaction="/publish/">Publish Review</button>
+                <button type="submit" class="btn btn-info" formaction="/">Get Score</button>
+                <button type="submit" class="btn btn-info" formaction="/publish/">Publish Review</button>
             </form>
             <p>
                 Score: {{score}}/100

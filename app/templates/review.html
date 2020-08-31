@@ -6,7 +6,7 @@
                     {{ msg[0] }}
                 {% endif %}
             {% endwith %}
-            <h2>REVIEW</h2> 
+            <h2 class="text-info">REVIEW</h2> 
             <p>Album: {{album}}</p>
             <p>Artist: {{artist}}</p>
             <p>Score: {{score}}/100</p>
@@ -16,31 +16,35 @@
                 data-review-id="{{id}}"
                 data-toggle="modal"
                 data-target="#deleteWarning"
-                class="btn btn-danger"
+                class="btn btn-info"
                 onclick="{setReviewId(this)}"
             >Delete</button>
         </div>
         
         <div
-            class="modal fade"
+            class="modal"
             id="deleteWarning"
             role="dialog"
         >
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteWarningLabel">Delete Review</h5>
-                </div>
-                <div class="modal-body">
-                    Do you want to delete your review on {{album}} by {{artist}}?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        No
-                    </button>
-                    <button type="button" class="btn btn-danger" onClick="deleteReview(reviewId)">
-                        Yes
-                    </button>
+            
+                <div class="p-3 mb-2 bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-info" id="deleteWarningLabel">Delete Review</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to delete your review on {{album}} by {{artist}}?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            No
+                        </button>
+                        <button type="button" class="btn btn-info" onClick="deleteReview(reviewId)">
+                            Yes
+                        </button>
                 </div>
             </div>
         </div>
