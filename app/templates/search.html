@@ -3,16 +3,19 @@
 {% block body %}
 <h2 class="text-info">Search Results</h2>
 {% for result in results %}
-<p class="p-3 mb-2 bg-info text-white">
+<p class = "border-bottom border-info">
     <td>
         <a href="{{ url_for('show_review', id=result.id) }}" class="btn btn-dark">
             {{ result.artist }} - {{ result.album }}
         </a>
     </td>
+    <td> {{ result.date }}</td>
     <td>
-        Score: {{ result.score }}
+        <span class="border border-info bg-info text-white font-weight-bold">
+            {{ result.score }}/100
+        </span>
     </td>
-    <td> Published: {{ result.date }}</td>
+    
 </p>
 {% endfor %}
 
