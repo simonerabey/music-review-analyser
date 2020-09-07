@@ -3,12 +3,11 @@
 {% block body %}
     {% with msg = get_flashed_messages() %}
         {% if msg %}
-            {{ msg[0] }}
+            <div class="border border-info bg-info text-white">
+                {{ msg[0] }}
+            </div>     
         {% endif %}
     {% endwith %}
-            <p>
-                You write the review, we assign a score based on the sentiment of the review.
-            </p>
             <h2 class="text-info">NEW REVIEW</h2>
             <form method="post">
                 <div class="form-group">
@@ -23,6 +22,9 @@
                     <label for="review_textarea">Review: </label>
                     <textarea name="description" class="form-control p-3 mb-2 bg-secondary text-white" id="review_textarea" rows="20">{{ description }}</textarea>
                 </div>
+                <p>
+                    Get a score based on the sentiment of your review:
+                </p>
                 <button type="submit" class="btn btn-info" formaction="/">Get Score</button>
                 <button type="submit" class="btn btn-info" formaction="/publish/">Publish Review</button>
             </form>
