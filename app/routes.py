@@ -5,11 +5,13 @@ from app.forms import SearchForm
 
 Review = models.Review
 
+#Tasks performed before a request is carried out
 @app.before_request
 def before_request():
     db.session.commit()
     g.search_form = SearchForm(meta={"csrf": False}, formdata=request.args)
 
+#Logic for main page consisting of the review form
 @app.route('/', methods=['GET', 'POST'])
 def index():
     db.create_all()
@@ -21,6 +23,7 @@ def index():
         return render_template("index.html", artist=artist, album=album, description=description, score=score)
     return render_template("index.html", artist="", album="", description="", score="-")
 
+#Displays page that shows search results
 @app.route('/search')
 def search():
     if not g.search_form.validate():
@@ -28,6 +31,7 @@ def search():
     results = Review.search(g.search_form.search.data)
     return render_template("search.html", results=results)
 
+#Publishes a review
 @app.route('/publish/', methods=['POST'])
 def publish():
     artist = request.form.get("artist")
@@ -39,6 +43,9 @@ def publish():
     db.session.commit()
     return redirect(url_for("show_review", id=review.id))
 
+'''Displays a review
+@param id: the id of the review in the database
+'''
 @app.route('/review/<int:id>', methods=['GET', 'POST'])
 def show_review(id):
     review = Review.query.filter_by(id=id)
@@ -48,7 +55,9 @@ def show_review(id):
     flash("Review not found")
     return render_template("review.html")
 
-
+'''Deletes a review
+@param id: the id of the review to be deleted from the database
+'''
 @app.route("/delete/<int:id>", methods=["DELETE"])
 def delete(id):
     review = Review.query.filter_by(id=id)
@@ -60,6 +69,11 @@ def delete(id):
         return jsonify({"msg": "Could not delete review"}), 200
     return jsonify({"msg": "Successfully deleted review"}), 204
 
+'''
+Calculates the score of a review
+@param review: the description of the review
+@ret score of the review out of 100
+'''
 def get_score(review):
     url = text_analytics_endpoint + "/text/analytics/v3.0/sentiment"
     document = {"documents": [{"id": "1", "language": "en", "text": review}]} 

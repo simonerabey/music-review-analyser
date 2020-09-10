@@ -1,5 +1,10 @@
 from app import es
 
+'''
+Adds a record to the index
+@param index: elasticsearch index
+@param model: record to be added to the index
+'''
 def add(index, model):
     if es:
         fields = {}
@@ -7,10 +12,21 @@ def add(index, model):
             fields[field] = getattr(model, field)
         es.index(index=index, id=model.id, body=fields)
 
+'''
+Deletes a record from the index
+@param index: elasticsearch index
+@param model: record to be deleted from the index
+'''
 def delete(index, model):
     if es:
         es.delete(index=index, id=model.id)
 
+'''
+Queries the index
+@param index: elasticsearch index
+@param query(str): a string consisting of the words to be searched for
+@ret List of records resulting from the query
+'''
 def query(index, query):
     if not es:
         return []
