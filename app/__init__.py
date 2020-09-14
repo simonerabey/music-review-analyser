@@ -16,7 +16,9 @@ db = SQLAlchemy(app)
 text_analytics_key = os.environ["TEXT_ANALYTICS_KEY"]
 text_analytics_endpoint = os.environ["TEXT_ANALYTICS_ENDPOINT"]
 
-es = Elasticsearch(os.environ["ELASTICSEARCH_URL"])
+es = None
+if os.environ["ELASTICSEARCH_URL"]:
+    es = Elasticsearch(os.environ["ELASTICSEARCH_URL"])
 
 from app import routes
 
