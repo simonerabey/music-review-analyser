@@ -9,6 +9,9 @@
         {% endif %}
     {% endwith %}
             <h2 class="text-info">NEW REVIEW</h2>
+            <p>
+                Score: {{score}}/100
+            </p>
             <form method="post">
                 <div class="form-group">
                     <label for="album_input">Album: </label>
@@ -28,8 +31,5 @@
                 <button type="submit" class="btn btn-info" formaction="/">Get Score</button>
                 <button type="submit" class="btn btn-info" formaction="/publish/">Publish Review</button>
             </form>
-            <p>
-                Score: {{score}}/100
-            </p>
         </div>
 {% endblock %}
