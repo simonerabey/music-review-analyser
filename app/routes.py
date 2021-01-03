@@ -2,8 +2,56 @@ import requests
 from app import app, text_analytics_endpoint, text_analytics_key, models, db
 from flask import render_template, request, redirect, url_for, jsonify, g, flash
 from app.forms import SearchForm
+from .models import User
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, login_required, current_user, logout_user
 
 Review = models.Review
+
+@app.route('/signup')
+def signup():
+    return render_template("signup.html")
+
+@app.route('/signup', methods=['POST'])
+def signup_post():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    email = request.form.get('email')
+
+    if User.query.filter_by(email=email).first():
+        flash('Email address already in use')
+        return redirect(url_for('signup'))
+
+    if User.query.filter_by(username=username).first():
+        flash('Username taken')
+        return redirect(url_for('signup'))
+    
+    user = User(username=username, password=generate_password_hash(password, method='sha256'), email=email)
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect(url_for('index'))
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login_post():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user = User.query.filter_by(username=username).first()
+    if not user or not check_password_hash(user.password, password):
+        flash('Login details incorrect')
+        return redirect(url_for(login))
+    login_user(user)
+    return redirect(url_for('index'))
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 #Tasks performed before a request is carried out
 @app.before_request
@@ -13,6 +61,7 @@ def before_request():
 
 #Logic for main page consisting of the review form
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     db.create_all()
     if request.method == "POST":
@@ -33,12 +82,14 @@ def search():
 
 #Publishes a review
 @app.route('/publish/', methods=['POST'])
+@login_required
 def publish():
     artist = request.form.get("artist")
     album = request.form.get("album")
     description = request.form.get("description")
     score = get_score(description)
-    review = Review(artist=artist, album=album, description=description, score=score)
+    user_id = current_user.id
+    review = Review(artist=artist, album=album, description=description, score=score, user_id=user_id)
     db.session.add(review)
     db.session.commit()
     return redirect(url_for("show_review", id=review.id))
@@ -51,7 +102,8 @@ def show_review(id):
     review = Review.query.filter_by(id=id)
     r = review.first()
     if r:
-        return render_template("review.html", id=id, artist=r.artist, album=r.album, review=r.description, score=r.score)
+        author = User.query.filter_by(id=r.user_id).first().username
+        return render_template("review.html", id=id, artist=r.artist, album=r.album, review=r.description, score=r.score, author=author)
     flash("Review not found")
     return render_template("review.html")
 
@@ -59,6 +111,7 @@ def show_review(id):
 @param id: the id of the review to be deleted from the database
 '''
 @app.route("/delete/<int:id>", methods=["DELETE"])
+@login_required
 def delete(id):
     review = Review.query.filter_by(id=id)
     try:

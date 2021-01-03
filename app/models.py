@@ -1,6 +1,13 @@
 from app import db, search
 from datetime import datetime
+from flask_login import UserMixin
 
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(1000), unique=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    reviews = db.relationship('Review', backref='user')
 
 #Mixin that models a database table where searches can be performed
 class Searchable(object):
@@ -66,6 +73,7 @@ class Review(Searchable, db.Model):
     description = db.Column(db.String(2000))
     score = db.Column(db.Integer)
     date = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return "<Review: %r - %r - %r - %d>" % self.album, self.artist, self.description, self.score

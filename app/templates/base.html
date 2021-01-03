@@ -17,7 +17,18 @@
         <![endif]-->
         <div class="container">
             <h1 class="text-info">MUSIC SENTIMENT REVIEW</h1>
-            <a type=button href="{{ url_for('index') }}" class="btn btn-info">New Review</a>
+            <nav class="navbar">
+                {% if current_user.is_authenticated %}
+                <a type=button href="{{ url_for('index') }}" class="btn btn-info">New Review</a>
+                {% endif %}
+                {% if not current_user.is_authenticated %}
+                <a type=button href="{{ url_for('signup') }}" class="btn btn-info">Create Account</a>
+                <a type=button href="{{ url_for('login') }}" class="btn btn-info">Login</a>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <a type=button href="{{ url_for('logout') }}" class="btn btn-info">Logout</a>
+                {% endif %}
+            </nav>
             <form action="/search" method="get">
                 <div class="form-group">
                     {{ g.search_form.search(class="form-control p-3 mb-2 bg-dark text-white", placeholder=g.search_form.search.label.text) }}

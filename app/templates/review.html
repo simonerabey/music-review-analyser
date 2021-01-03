@@ -7,10 +7,12 @@
                 {% endif %}
             {% endwith %}
             <h2 class="text-info">REVIEW</h2> 
+            <p>Author: {{author}}</p>
             <p>Album: {{album}}</p>
             <p>Artist: {{artist}}</p>
             <p>Score: {{score}}/100</p>
             <p>Review: {{review}}</p>
+            {% if current_user.username == author %}
             <button
                 type="button"
                 data-review-id="{{id}}"
@@ -19,6 +21,7 @@
                 class="btn btn-info"
                 onclick="{setReviewId(this)}"
             >Delete</button>
+            {% endif %}
         </div>
         
         <div
