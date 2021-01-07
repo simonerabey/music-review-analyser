@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block body %}
+    {% with msg = get_flashed_messages() %}
+        {% if msg %}
+            <div class="border border-info bg-info text-white">
+                {{ msg[0] }}
+            </div>     
+        {% endif %}
+    {% endwith %}
+            <h2 class="text-info">NEW REVIEW</h2>
+            <p>
+                Score: {{score}}/100
+            </p>
+            <form method="post">
+                <div class="form-group">
+                    <label for="album_input">Album: </label>
+                    <input name="album" type="text" class="form-control p-3 mb-2 bg-secondary text-white" id="album_input" value="{{ album }}">
+                </div>
+                <div class="form-group">
+                    <label for="artist_input">Artist:</label>
+                    <input name="artist" type="text" class="form-control p-3 mb-2 bg-secondary text-white" id="artist_input" value="{{ artist }}">
+                </div>
+                <div class="form-group">
+                    <label for="review_textarea">Review: </label>
+                    <textarea name="description" class="form-control p-3 mb-2 bg-secondary text-white" id="review_textarea" rows="20">{{ description }}</textarea>
+                </div>
+                <p>
+                    Get a score based on the sentiment of your review:
+                </p>
+                <button type="submit" class="btn btn-info" formaction="/create">Get Score</button>
+                <button type="submit" class="btn btn-info" formaction="/publish/">Publish Review</button>
+            </form>
+        </div>
+{% endblock %}

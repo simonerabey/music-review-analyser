@@ -63,13 +63,19 @@ class Searchable(object):
 db.event.listen(db.session, "before_commit", Searchable.before_commit)
 db.event.listen(db.session, "after_commit", Searchable.after_commit)
 
-#Database model of a review
-class Review(Searchable, db.Model):
-    __tablename__ = "review"
-    __searchable__ = ["album", "artist"]
+class Album(Searchable, db.Model):
+    __tablename__ = "album"
+    __searchable__ = ["name", "artist"]
     id = db.Column(db.Integer, primary_key=True)
-    album = db.Column(db.String(100))
+    name = db.Column(db.String(100))
     artist = db.Column(db.String(100))
+    reviews = db.relationship('Review', backref='album')
+
+#Database model of a review
+class Review(db.Model):
+    __tablename__ = "review"
+    id = db.Column(db.Integer, primary_key=True)
+    album_id = db.Column(db.Integer, db.ForeignKey('album.id'))
     description = db.Column(db.String(2000))
     score = db.Column(db.Integer)
     date = db.Column(db.DateTime, default=datetime.utcnow)

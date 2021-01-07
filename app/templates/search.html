@@ -5,14 +5,13 @@
 {% for result in results %}
 <p class = "border-bottom border-info">
     <td>
-        <a href="{{ url_for('show_review', id=result.id) }}" class="btn btn-dark">
-            {{ result.artist }} - {{ result.album }}
+        <a href="{{ url_for('show_album_detail', id=result.id) }}" class="btn btn-dark">
+            {{ result.artist }} - {{ result.name }}
         </a>
     </td>
-    <td> {{ result.date }}</td>
     <td>
         <span class="border border-info bg-info text-white font-weight-bold">
-            {{ result.score }}/100
+            {{ scores[result.id] }}/100
         </span>
     </td>
     
