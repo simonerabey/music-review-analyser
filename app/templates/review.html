@@ -7,15 +7,19 @@
                 {% endif %}
             {% endwith %}
             <h2 class="text-info">REVIEW</h2> 
-            <p>Author: {{author}}</p>
+            <p>
+                <a href="{{ url_for('profile', id=review.user_id) }}" class="btn btn-dark">
+                    Author: {{author}}
+                </a>
+            </p>
             <p>Album: {{album}}</p>
             <p>Artist: {{artist}}</p>
-            <p>Score: {{score}}/100</p>
-            <p>Review: {{review}}</p>
-            {% if current_user.id == author %}
+            <p>Score: {{review.score}}/100</p>
+            <p>Review: {{review.description}}</p>
+            {% if current_user.username == author %}
             <button
                 type="button"
-                data-review-id="{{id}}"
+                data-review-id="{{review.id}}"
                 data-toggle="modal"
                 data-target="#deleteWarning"
                 class="btn btn-info"

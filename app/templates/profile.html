@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+
+{% block body %}
+        <div>
+            <h2 class="text-info">{{user.username}}</h2> 
+        </div>
+        <div>
+            <h3 class="text-info">REVIEWS</h3>
+            {% for review in user.reviews %}
+            <p class = "border-bottom border-info">
+                <td>
+                    <a href="{{ url_for('show_review', id=review.id) }}" class="btn btn-dark">
+                        {{ albums[review.album_id].artist }} - {{ albums[review.album_id].name }}
+                    </a>
+                </td>
+                <td>
+                    <span class="border border-info bg-info text-white font-weight-bold">
+                        {{ review.score }}/100
+                    </span>
+                </td>
+                
+            </p>
+            {% endfor %}
+        </div>
+        
+        
+
+{% endblock %}

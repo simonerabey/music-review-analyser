@@ -142,7 +142,7 @@ def show_review(id):
     if r:
         author = User.query.filter_by(id=r.user_id).first().username
         album = Album.query.filter_by(id=r.album_id).first()
-        return render_template("review.html", id=id, artist=album.artist, album=album.name, review=r.description, score=r.score, author=author)
+        return render_template("review.html", artist=album.artist, album=album.name, review=r, author=author)
     flash("Review not found")
     return render_template("review.html")
 
@@ -160,6 +160,14 @@ def delete(id):
     except:
         return jsonify({"msg": "Could not delete review"}), 200
     return jsonify({"msg": "Successfully deleted review"}), 204
+
+@app.route("/profile/<int:id>")
+def profile(id):
+    user = User.query.get(id)
+    albums = {}
+    for review in user.reviews:
+        albums[review.album_id] = Album.query.get(review.album_id)
+    return render_template("profile.html", user=user, albums=albums)
 
 '''
 Calculates the score of a review
