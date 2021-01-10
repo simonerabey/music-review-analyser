@@ -180,5 +180,5 @@ def get_score(review):
     headers = {"Ocp-Apim-Subscription-Key": text_analytics_key}
     response = requests.post(url, headers=headers, json=document)
     results = response.json()
-    raw_score = results["documents"][0]["confidenceScores"]["positive"]
+    raw_score = results["documents"][0]["confidenceScores"]["positive"] + (0.5*results["documents"][0]["confidenceScores"]["neutral"])
     return int(raw_score * 100)

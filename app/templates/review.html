@@ -8,8 +8,9 @@
             {% endwith %}
             <h2 class="text-info">REVIEW</h2> 
             <p>
+                Author:
                 <a href="{{ url_for('profile', id=review.user_id) }}" class="btn btn-dark">
-                    Author: {{author}}
+                     {{author}}
                 </a>
             </p>
             <p>Album: {{album}}</p>
